@@ -44,7 +44,7 @@ void test_trained_detector( String obj_det_filename, String test_dir, String vid
         if ( cap.isOpened() )
         {
             cap >> img;
-            delay = 1;
+            delay = 24;
         }
         else if( i < files.size() )
         {

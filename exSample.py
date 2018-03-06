@@ -21,7 +21,7 @@ IF_SHOW_PATCH = True # warning: it can critically slow down extraction process
 IF_PLOT_HOG_FEATURE = False
 
 NEGA_SPF = 3
-POS_SPF = 10
+POS_SPF = 1
 RAND_SAMPLE = 100
 # VID_NUM = 1
 PSIZE = 64
@@ -54,9 +54,11 @@ for VID_NUM in TRAIN_SET_RANGE:
         sigma = 1 + 0.5*np.random.rand()
         if not x_0 == -1 :
             patch = frame[x_0:x_1, y_0:y_1]
+            px, py = patch.shape
             patch = cv.resize(patch, (PSIZE, PSIZE)) # size of target area varies in time so we resize each patch to a certain size, fitting HoG Descriptor.
             idx = idx + 1
-            cv.imwrite("./pos/v_%d_%d.jpg"%(VID_NUM, idx), patch)
+            for k in range(POS_SPF):
+                cv.imwrite("./pos/v_%d_%d_ms_%d.jpg"%(VID_NUM, idx, k), cv.resize(patch, (int(px*1.1**k), int(py*1.1**k))))
 
 
         # for k in range(NEGA_SPF):
