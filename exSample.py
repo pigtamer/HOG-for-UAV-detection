@@ -57,8 +57,7 @@ for VID_NUM in TRAIN_SET_RANGE:
             px, py = patch.shape
             patch = cv.resize(patch, (PSIZE, PSIZE)) # size of target area varies in time so we resize each patch to a certain size, fitting HoG Descriptor.
             idx = idx + 1
-            for k in range(POS_SPF):
-                cv.imwrite("./pos/v_%d_%d_ms_%d.jpg"%(VID_NUM, idx, k), cv.resize(patch, (int(px*1.1**k), int(py*1.1**k))))
+            cv.imwrite("./pos/v_%d_%d.jpg"%(VID_NUM, idx),patch)
 
 
         # for k in range(NEGA_SPF):
