@@ -5,14 +5,14 @@
 
 #include <iostream>
 #include <time.h>
-
+#include <string>
 using namespace cv;
 using namespace cv::ml;
 using namespace std;
 
-
 class HoGTrainer{
 private:
+    string  SVM_TYPE;
     vector< float > get_svm_detector( const Ptr< SVM >& svm );
     void convert_to_ml( const std::vector< Mat > & train_samples, Mat& trainData );
     void load_images( const String & dirname, vector< Mat > & img_lst, bool showImages );

@@ -158,17 +158,31 @@ void HoGTrainer::test_trained_detector(String obj_det_filename,
     vector<double> foundWeights;
 
     hog.detectMultiScale(img, detections, foundWeights);
-    for (size_t j = 0; j < detections.size(); j++) {
-      Scalar color = Scalar(0, foundWeights[j] * foundWeights[j] * 200, 0);
-      rectangle(img, detections[j], color, img.cols / 400 + 1);
+    if (foundWeights.size() > 0){
+        double MAX_WEIGHT = *max_element(std::begin(foundWeights), std::end(foundWeights));
+        for (size_t j = 0; j < detections.size(); j++) {
+            Scalar color = Scalar(0, foundWeights[j] * foundWeights[j] * 200, 0);
+            if( foundWeights[j] == MAX_WEIGHT){
+                if (foundWeights[j] > 0.1){
+                    // cout << foundWeights[j] << endl;
+                    double w = foundWeights[j];
+                    putText(img, to_string(w), detections[j].tl(),  FONT_HERSHEY_PLAIN, 2, Scalar(255, 0, 0));
+                    rectangle(img, detections[j], color, img.cols / 400 + 1);
+                }else{
+                    putText(img, "[!]", Point(0, img.cols / 4),  FONT_HERSHEY_DUPLEX, 5, Scalar(0, 0, 255));
+                }
+            }
+        }
+    }else{
+        putText(img, "[!]", Point(0, img.cols / 4),  FONT_HERSHEY_DUPLEX, 5, Scalar(0, 0, 255));
     }
-
     imshow(obj_det_filename, img);
 
     if (waitKey(delay) == 27) {
-      return;
+        return;
     }
-  }
+
+    }
 }
 
 int HoGTrainer::run(int detector_width, int detector_height, string pos_dir,
@@ -318,8 +332,9 @@ int HoGTrainer::run(int detector_width, int detector_height, string pos_dir,
 }
 
 // TEST THIS CLASS
-int main() {
+int main(int argc, char** argv) {
   HoGTrainer testTrainer;
-  testTrainer.run(64, 64, "../pos", "../nega", "../", "detector.yml",
-           "../Video_1.avi");
+//   testTrainer.run(64, 64, "../pos", "../nega", "../", "detector.yml", "../Video_1.avi", true, true);
+  testTrainer.run(64, 64, "../pos", "../nega", "../", "detector.yml",argv[1], argv[2], true);
+
 }
